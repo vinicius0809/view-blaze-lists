@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "blaze-lists": {
+      "hosting": {
+        "view-blaze-lists": [
+          "blaze-lists"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "blaze-lists"
+  }
+}

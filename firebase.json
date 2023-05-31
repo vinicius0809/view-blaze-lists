@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "view-blaze-lists",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}
