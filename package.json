@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "deploy": "ng build --configuration production --base-href=\"/view-blaze-lists/\" && angular-cli-ghpages --dir=dist/view-blaze-lists",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
