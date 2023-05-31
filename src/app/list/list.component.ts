@@ -60,10 +60,9 @@ export class ListComponent {
   updateTableData() {
     console.log("Entrou " + this.selectedHour);
     for (let i = 0; i < 24; i++) {
-      const list = this.tableData2[i];
-
-      if (list != undefined && i == this.selectedHour) {
-        list.forEach(listObj => {
+      if (this.tableData2[i] != undefined && i == this.selectedHour) {        
+        this.tableData2[i].sort((a,b) => b.listBalance - a.listBalance);
+        this.tableData2[i].forEach(listObj => {
           const index = this.tableData.findIndex(x => x.listHour == listObj.listHour && x.listSize == listObj.listSize && x.inverse == listObj.inverse);
           if (index == -1) {
             this.tableData.push(listObj);
