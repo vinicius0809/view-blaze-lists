@@ -1,10 +1,10 @@
-
 <input type="number" [value]="selectedHour">
 <div class="container">
   <div class="list-table" *ngFor="let list of lists$ | async">
     <div class="list-header">
       Lista {{list.listSize}} ({{list.inverse ? "inversa" : "normal"}})
-      <div>Saldo: {{list.listBalance > -1 ? "🟩 +"+list.listBalance : "🟥" + list.listBalance}}</div>
+      <div>Saldo: {{list.listBalance > -1 ? "🟩 +" + list.listBalance : "🟥" + list.listBalance}}</div>
+      <div>Gradiente: {{list.listGradient > 0 ? "🟩 +" + list.listGradient : "🟥" + list.listGradient}}</div>
       <div>Total de Sinais
         {{list.listElements.length}}</div>
       <table>

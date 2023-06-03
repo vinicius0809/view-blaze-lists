@@ -22,6 +22,7 @@ interface List {
   listWhites: number;
   listWins: number;
   listSize: number;
+  listGradient: number;
   listElements: ListElement[];
 }
 
@@ -52,7 +53,8 @@ export class ListComponent {
     this.lists$ = collectionData(insideListsCollection) as Observable<List[]>;
     this.lists$ = this.lists$.pipe(
       map(r => {
-        return r.sort((a,b) => b.listBalance - a.listBalance);
+        // return r.sort((a,b) => b.listBalance - a.listBalance);
+        return r.sort((a,b) => b.listGradient - a.listGradient);
       })
     );
 
