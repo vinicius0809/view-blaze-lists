@@ -9,6 +9,9 @@ interface ListElement {
   predictedPercentage?: string;
   resultColors: string[];
   result: string;
+  actualGradient: number;
+  actualGradientText: string;
+  considered: string;
 }
 
 interface List {
@@ -57,6 +60,25 @@ export class ListComponent {
     this.lists$ = collectionData(insideListsCollection) as Observable<List[]>;
     this.lists$ = this.lists$.pipe(
       map((r) => {
+        if (r.length > 1) {
+          for (let i = 0; i < r[0].listElements.length; i++) {
+            const element1 = r[0].listElements[i];
+            const element2 = r[1].listElements[i];
+
+            element1.actualGradientText = getActualGradientText(element1.actualGradient);
+            element2.actualGradientText = getActualGradientText(element2.actualGradient);
+
+            if(element1.actualGradient > element2.actualGradient){
+              element1.considered = "🟦"
+            }
+            else if(element2.actualGradient > element1.actualGradient){
+              element2.considered = "🟦"
+            }else{
+              element1.considered = ""
+              element2.considered = ""
+            }
+          }
+        }
         return r.sort((a, b) => b.listGradient - a.listGradient);
       })
     );
@@ -69,3 +91,14 @@ export class ListComponent {
       .padStart(2, '0')}`;
   }
 }
+function getActualGradientText(actualGradient: number): string {
+  let actualGradientText = "";
+  if (actualGradient >= 0) {
+    actualGradientText = "🟩 +" + actualGradient;
+  }
+  else if (actualGradient < 0) {
+    actualGradientText = "🟥 " + actualGradient;
+  }
+  return actualGradientText;
+}
+
