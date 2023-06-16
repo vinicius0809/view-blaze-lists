@@ -55,6 +55,7 @@ export class ListComponent {
   }
 
   private updateLists() {
+    const gradientLimiar = 0;
     const insideListsCollection = collection(
       this.firestore,
       `lists/${this.getDateStringFormatted(new Date())}_${this.selectedHour}/inside-lists`
@@ -72,7 +73,10 @@ export class ListComponent {
             element2.consideredWin = "";
 
             if (consideredList > -1) {
-              if (r[consideredList].listElements[i].result != "❌" && r[consideredList].listElements[i].result != "") {
+              if(r[consideredList].listElements[i].result == ""){
+                r[consideredList].listElements[i].consideredWin = "🕖"
+              }
+              else if (r[consideredList].listElements[i].result != "❌") {
                 r[consideredList].listElements[i].consideredWin = "✔️"
                 this.totalWinsG7++;
               }
@@ -84,11 +88,11 @@ export class ListComponent {
             element1.actualGradientText = getActualGradientText(element1.actualGradient);
             element2.actualGradientText = getActualGradientText(element2.actualGradient);
 
-            if (element1.actualGradient - element2.actualGradient > 0.5) {
+            if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
               element1.considered = "🟦";
               consideredList = 0;
             }
-            else if (element2.actualGradient - element1.actualGradient > 0.5) {
+            else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar) {
               element2.considered = "🟦";
               consideredList = 1;
             } else {
