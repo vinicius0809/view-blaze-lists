@@ -84,11 +84,11 @@ export class ListComponent {
             element1.actualGradientText = getActualGradientText(element1.actualGradient);
             element2.actualGradientText = getActualGradientText(element2.actualGradient);
 
-            if (element1.actualGradient - element2.actualGradient > 2) {
+            if (element1.actualGradient - element2.actualGradient > 0.5) {
               element1.considered = "🟦";
               consideredList = 0;
             }
-            else if (element2.actualGradient - element1.actualGradient > 2) {
+            else if (element2.actualGradient - element1.actualGradient > 0.5) {
               element2.considered = "🟦";
               consideredList = 1;
             } else {
