@@ -1,6 +1,8 @@
 <div>
 <input type="number" [(ngModel)]="hour">
-<p>{{totalWinsG7}}</p></div>
+<strong><p>Total ✔️: {{totalWinsG7}} | 
+Total 🔺: {{totalLoss}} | 
+Assertividade: {{(100*totalWinsG7/(totalLoss+totalWinsG7)).toFixed(2)}}%</p></strong></div>
 <div class="container">
   <div class="list-table" *ngFor="let list of lists$| async">
     <div class="list-header">
