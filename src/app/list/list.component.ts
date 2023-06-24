@@ -69,8 +69,8 @@ export class ListComponent {
           this.totalLoss = 0;
           let consideredList = -1;
           for (let i = 0; i < r[0].listElements.length; i++) {
-            const elements1 = [r[0].listElements[i], r[0].listElements[i - 1], r[0].listElements[i - 2]];
-            const elements2 = [r[1].listElements[i], r[1].listElements[i - 1], r[1].listElements[i - 2]];
+            const elements1 = [r[0].listElements[i], r[0].listElements[i - 1], r[0].listElements[i - 2], r[0].listElements[i - 3]];
+            const elements2 = [r[1].listElements[i], r[1].listElements[i - 1], r[1].listElements[i - 2], r[1].listElements[i - 3]];
             const element1 = elements1[0];
             const element2 = elements2[0];
             element1.consideredWin = "";
@@ -96,7 +96,7 @@ export class ListComponent {
             element2.considered = ""
             consideredList = -1;
 
-            if (i < 2) {
+            if (i < 3) {
               if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
                 element1.considered = "🟦";
                 consideredList = 0;
@@ -126,16 +126,18 @@ export class ListComponent {
   }
 
   private returnConsecutivePattern(elements: ListElement[]) {
+    let countLoss = 0;
+    elements.forEach(el => {
+      countLoss += el.result.includes("❌") ? 1 : 0;
+    });
     return (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌"].includes(elements[2].result))
       || (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
-      || (["❌"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result));
+      || (["❌"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
+       || countLoss > 2;
   }
 
   getDateStringFormatted(date: Date) {
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
-      .getDate()
-      .toString()
-      .padStart(2, '0')}`;
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-24`;
   }
 }
 function getActualGradientText(actualGradient: number): string {
