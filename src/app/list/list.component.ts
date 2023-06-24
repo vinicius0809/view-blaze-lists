@@ -137,7 +137,7 @@ export class ListComponent {
   }
 
   getDateStringFormatted(date: Date) {
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-24`;
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`;
   }
 }
 function getActualGradientText(actualGradient: number): string {
