@@ -96,7 +96,7 @@ export class ListComponent {
             element2.considered = ""
             consideredList = -1;
 
-            if (i < 3) {
+            // if (i < 3) {
               if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
                 element1.considered = "🟦";
                 consideredList = 0;
@@ -105,19 +105,19 @@ export class ListComponent {
                 element2.considered = "🟦";
                 consideredList = 1;
               }
-            }
-            else {
-              const twoConsecutiveLosses1 = this.returnConsecutivePattern(elements1);
-              const twoConsecutiveLosses2 = this.returnConsecutivePattern(elements2);
-              if (element1.result != "" && (elements1[1].considered == "🟦" && !twoConsecutiveLosses1 || twoConsecutiveLosses2)) {
-                element1.considered = "🟦";
-                consideredList = 0;
-              }
-              else if (element2.result != "" && (elements2[1].considered == "🟦" && !twoConsecutiveLosses2 || twoConsecutiveLosses1)) {
-                element2.considered = "🟦";
-                consideredList = 1;
-              }
-            }
+            // }
+            // else {
+            //   const twoConsecutiveLosses1 = this.returnConsecutivePattern(elements1);
+            //   const twoConsecutiveLosses2 = this.returnConsecutivePattern(elements2);
+            //   if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar && (elements1[1].considered == "🟦" && !twoConsecutiveLosses1 || twoConsecutiveLosses2)) {
+            //     element1.considered = "🟦";
+            //     consideredList = 0;
+            //   }
+            //   else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar && (elements2[1].considered == "🟦" && !twoConsecutiveLosses2 || twoConsecutiveLosses1)) {
+            //     element2.considered = "🟦";
+            //     consideredList = 1;
+            //   }
+            // }
           }
         }
         return r.sort((a, b) => b.listGradient - a.listGradient);
