@@ -34,8 +34,11 @@ interface List {
 })
 export class ListComponent {
   selectedHour: number;
-  totalWinsG7: number = 0;
+  balanceG3: number = 0;
+  balanceG5: number = 0;
+  balanceG7: number = 0;
   totalLoss: number = 0;
+  totalWins: number = 0;
   lists$: Observable<List[]> = new Observable<List[]>();
 
   @Input()
@@ -64,9 +67,15 @@ export class ListComponent {
     this.lists$ = collectionData(insideListsCollection) as Observable<List[]>;
     this.lists$ = this.lists$.pipe(
       map((r) => {
+        let consecutiveLossesG3 = 0;
+        let consecutiveLossesG5 = 0;
+        let consecutiveLossesG7 = 0;
         if (r.length > 1) {
-          this.totalWinsG7 = 0;
           this.totalLoss = 0;
+          this.totalWins = 0;
+          this.balanceG3 = 0;
+          this.balanceG5 = 0;
+          this.balanceG7 = 0;
           let consideredList = -1;
           for (let i = 0; i < r[0].listElements.length; i++) {
             const elements1 = [r[0].listElements[i], r[0].listElements[i - 1], r[0].listElements[i - 2], r[0].listElements[i - 3]];
@@ -81,12 +90,34 @@ export class ListComponent {
                 r[consideredList].listElements[i].consideredWin = "🕖"
               }
               else if (r[consideredList].listElements[i].result != "❌") {
-                r[consideredList].listElements[i].consideredWin = "✔️"
-                this.totalWinsG7++;
+                r[consideredList].listElements[i].consideredWin = "✔️";
+                this.totalWins++;
+                this.balanceG3++;
+                this.balanceG5++;
+                this.balanceG7++;
+                consecutiveLossesG5 = 0;
+                consecutiveLossesG7 = 0;
+                consecutiveLossesG3 = 0;
               }
               else if (r[consideredList].listElements[i].result == "❌") {
                 r[consideredList].listElements[i].consideredWin = "🔺";
                 this.totalLoss++;
+                consecutiveLossesG5++;
+                consecutiveLossesG7++;
+                consecutiveLossesG3++;
+
+                if (consecutiveLossesG3 > 1) {
+                  this.balanceG3 -= 15;
+                  consecutiveLossesG3 = 0;
+                }
+                if (consecutiveLossesG5 > 2) {
+                  this.balanceG5 -= 63;
+                  consecutiveLossesG5 = 0;
+                }
+                if (consecutiveLossesG7 > 3) {
+                  this.balanceG7 -= 255;
+                  consecutiveLossesG7 = 0;
+                }
               }
             }
 
@@ -97,14 +128,14 @@ export class ListComponent {
             consideredList = -1;
 
             // if (i < 3) {
-              if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
-                element1.considered = "🟦";
-                consideredList = 0;
-              }
-              else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar) {
-                element2.considered = "🟦";
-                consideredList = 1;
-              }
+            if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
+              element1.considered = "🟦";
+              consideredList = 0;
+            }
+            else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar) {
+              element2.considered = "🟦";
+              consideredList = 1;
+            }
             // }
             // else {
             //   const twoConsecutiveLosses1 = this.returnConsecutivePattern(elements1);
@@ -133,7 +164,7 @@ export class ListComponent {
     return (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌"].includes(elements[2].result))
       || (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
       || (["❌"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
-       || countLoss > 2;
+      || countLoss > 2;
   }
 
   getDateStringFormatted(date: Date) {
