@@ -136,6 +136,7 @@ export class ListComponent {
               element2.considered = "🟦";
               consideredList = 1;
             }
+            
             // }
             // else {
             //   const twoConsecutiveLosses1 = this.returnConsecutivePattern(elements1);
@@ -168,7 +169,8 @@ export class ListComponent {
   }
 
   getDateStringFormatted(date: Date) {
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`;
+    // return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`;
+    return `${date.getFullYear()}-07-06`;
   }
 }
 function getActualGradientText(actualGradient: number): string {

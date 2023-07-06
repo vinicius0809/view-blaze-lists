@@ -1,13 +1,13 @@
 <div>
   <input type="number" [(ngModel)]="hour">
   <strong>
-    <p>Total ✔️: {{totalWins}} |
-      Total 🔺: {{totalLoss}} |
+    <p>Total ✔️: {{totalWins.toString().padStart(2, '0')}} |
+      Total 🔺: {{totalLoss.toString().padStart(2, '0')}} |
       Assertividade: {{(100*totalWins/(totalLoss+totalWins)).toFixed(2)}}%</p>
-    <p>Saldo G1: {{totalWins-totalLoss*3 > -1 ? "🟩 +" + (totalWins-totalLoss*3) : "🟥 " + (totalWins-totalLoss*3)}} |
-      Saldo G3: {{balanceG3 > -1 ? "🟩 +" + balanceG3 : "🟥 " + balanceG3 }} |
-      Saldo G5: {{balanceG5 > -1 ? "🟩 +" + balanceG5 : "🟥 " + balanceG5}} |
-      Saldo G7: {{balanceG7 > -1 ? "🟩 +" + balanceG7 : "🟥 " + balanceG7}}
+    <p>Saldo G1: {{totalWins-totalLoss*3 > -1 ? "🟩 +" + (totalWins-totalLoss*3).toString().padStart(2, '0') : "🟥 -" + ((totalWins-totalLoss*3)*-1).toString().padStart(2, '0') }} |
+      Saldo G3: {{balanceG3 > -1 ? "🟩 +" + balanceG3.toString().padStart(2, '0') : "🟥 -" + (-1*balanceG3).toString().padStart(2, '0') }} |
+      Saldo G5: {{balanceG5 > -1 ? "🟩 +" + balanceG5.toString().padStart(2, '0') : "🟥 -" + (-1*balanceG5).toString().padStart(2, '0') }} |
+      Saldo G7: {{balanceG7 > -1 ? "🟩 +" + balanceG7.toString().padStart(2, '0') : "🟥 -" + (-1*balanceG7).toString().padStart(2, '0') }}
     </p>
   </strong>
 </div>
