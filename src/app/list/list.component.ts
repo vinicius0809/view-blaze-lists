@@ -59,7 +59,7 @@ export class ListComponent {
   }
 
   private updateLists() {
-    const gradientLimiar = 0;
+    const gradientLimiar = 1;
     const insideListsCollection = collection(
       this.firestore,
       `lists/${this.getDateStringFormatted(new Date())}_${this.selectedHour}/inside-lists`
@@ -127,29 +127,29 @@ export class ListComponent {
             element2.considered = ""
             consideredList = -1;
 
-            // if (i < 3) {
-            if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
-              element1.considered = "🟦";
-              consideredList = 0;
+            if (i < 3) {
+              if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar) {
+                element1.considered = "🟦";
+                consideredList = 0;
+              }
+              else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar) {
+                element2.considered = "🟦";
+                consideredList = 1;
+              }
+
             }
-            else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar) {
-              element2.considered = "🟦";
-              consideredList = 1;
+            else {
+              const twoConsecutiveLosses1 = this.returnConsecutivePattern(elements1);
+              const twoConsecutiveLosses2 = this.returnConsecutivePattern(elements2);
+              if (element1.result != "" && (element1.actualGradient - element2.actualGradient > gradientLimiar || (elements1[1].considered == "🟦" && !twoConsecutiveLosses1 || twoConsecutiveLosses2))) {
+                element1.considered = "🟦";
+                consideredList = 0;
+              }
+              else if (element2.result != "" && (element2.actualGradient - element1.actualGradient > gradientLimiar || (elements2[1].considered == "🟦" && !twoConsecutiveLosses2 || twoConsecutiveLosses1))) {
+                element2.considered = "🟦";
+                consideredList = 1;
+              }
             }
-            
-            // }
-            // else {
-            //   const twoConsecutiveLosses1 = this.returnConsecutivePattern(elements1);
-            //   const twoConsecutiveLosses2 = this.returnConsecutivePattern(elements2);
-            //   if (element1.result != "" && element1.actualGradient - element2.actualGradient > gradientLimiar && (elements1[1].considered == "🟦" && !twoConsecutiveLosses1 || twoConsecutiveLosses2)) {
-            //     element1.considered = "🟦";
-            //     consideredList = 0;
-            //   }
-            //   else if (element2.result != "" && element2.actualGradient - element1.actualGradient > gradientLimiar && (elements2[1].considered == "🟦" && !twoConsecutiveLosses2 || twoConsecutiveLosses1)) {
-            //     element2.considered = "🟦";
-            //     consideredList = 1;
-            //   }
-            // }
           }
         }
         return r.sort((a, b) => b.listGradient - a.listGradient);
@@ -162,15 +162,45 @@ export class ListComponent {
     elements.forEach(el => {
       countLoss += el.result.includes("❌") ? 1 : 0;
     });
+
+    const lossPatterns = [
+      [["❌", "✅", "✅(⚪️)","💚(⚪️)"], ["❌", "✅", "✅(⚪️)","💚(⚪️)"], ["❌"]],
+      [["❌", "✅", "✅(⚪️)","💚(⚪️)"], ["❌"], ["❌", "✅", "✅(⚪️)","💚(⚪️)"]],
+      [["❌"], ["❌", "✅", "✅(⚪️)","💚(⚪️)"], ["❌", "✅", "✅(⚪️)","💚(⚪️)"]],
+    ];
+    // const lossPatterns = [
+    //   [["❌", "✅", "✅(⚪️)", "💚(⚪️)"], ["❌", "✅", "✅(⚪️)", "💚(⚪️)"], ["❌", "✅", "✅(⚪️)", "💚(⚪️)"]],
+    //   [["❌", "✅", "✅(⚪️)", "💚(⚪️)"], ["❌", "✅", "✅(⚪️)", "💚(⚪️)"], ["❌", "✅", "✅(⚪️)", "💚(⚪️)"]],
+    //   [["❌", "✅", "✅(⚪️)", "💚(⚪️)"], ["❌", "✅", "✅(⚪️)", "💚(⚪️)"], ["❌", "✅", "✅(⚪️)", "💚(⚪️)"]],
+    // ];
+    let thisElementsIsOnLossPattern = true;
+
+    lossPatterns.forEach(lossPattern => {
+      lossPattern.forEach(lossPatternArray => {
+        let thisListIsLoss = true;
+        for (let i = 0; i < lossPatternArray.length; i++) {
+          const lossPatternElement = lossPatternArray[i];
+          const listElement = elements[i].result;
+
+          if (!lossPatternArray.includes(listElement)) {
+            thisListIsLoss = false;
+          }
+        }
+        thisElementsIsOnLossPattern = thisListIsLoss;
+      });
+    });
+
+    return thisElementsIsOnLossPattern;
+
     return (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌"].includes(elements[2].result))
       || (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
       || (["❌"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
-      || countLoss > 2;
+      || countLoss > 0;
   }
 
   getDateStringFormatted(date: Date) {
     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${(date.getDate()).toString().padStart(2, '0')}`;
-    // return `${date.getFullYear()}-07-06`;
+    // return `${date.getFullYear()}-09-30`;
   }
 }
 function getActualGradientText(actualGradient: number): string {
