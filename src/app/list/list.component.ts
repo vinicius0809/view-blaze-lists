@@ -179,7 +179,6 @@ export class ListComponent {
       lossPattern.forEach(lossPatternArray => {
         let thisListIsLoss = true;
         for (let i = 0; i < lossPatternArray.length; i++) {
-          const lossPatternElement = lossPatternArray[i];
           const listElement = elements[i].result;
 
           if (!lossPatternArray.includes(listElement)) {
@@ -190,12 +189,7 @@ export class ListComponent {
       });
     });
 
-    return thisElementsIsOnLossPattern;
-
-    return (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌"].includes(elements[2].result))
-      || (["❌", "✅", "✅(⚪️)"].includes(elements[0].result) && ["❌"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
-      || (["❌"].includes(elements[0].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[1].result) && ["❌", "✅", "✅(⚪️)"].includes(elements[2].result))
-      || countLoss > 0;
+    return thisElementsIsOnLossPattern || countLoss > 2;
   }
 
   getDateStringFormatted(date: Date) {
